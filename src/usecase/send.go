@@ -66,7 +66,8 @@ func (service serviceSend) wrapSendMessage(ctx context.Context, client *whatsmeo
 	// Store message asynchronously with timeout
 	// Use a goroutine to avoid blocking the send operation
 	go func() {
-		storeCtx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		// Preserve device-scoped values from request context while detaching cancellation.
+		storeCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 2*time.Second)
 		defer cancel()
 
 		if err := service.chatStorageRepo.StoreSentMessageWithContext(storeCtx, ts.ID, senderJID, recipient.String(), content, ts.Timestamp); err != nil {
