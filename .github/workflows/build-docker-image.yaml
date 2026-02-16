@@ -44,7 +44,7 @@ jobs:
   build-and-push-arm:
     if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     environment: production
-    runs-on: [ARM64]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
